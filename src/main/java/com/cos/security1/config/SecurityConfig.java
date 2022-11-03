@@ -30,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //밑에 세줄을 추가하면 어드민이나 유저나 뭘 들어가도 그냥 접속하게 안하고 로그인 페이지로 가게 해준다
                 .and()
                 .formLogin()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .loginProcessingUrl("/login")  //login 주소가 호출이 되면 시큐리티가 낚아채서 대신 로그인을 진행해준다
+                .defaultSuccessUrl("/");    //login 완료되면 메인페이지로
     }
 }
 

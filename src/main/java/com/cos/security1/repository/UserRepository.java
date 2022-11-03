@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 //이제 필요한 곳에 @Autowired 해주면 된다
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
+    // findBy 규칙 -> Username 문법
+    // select * from user where username = ? 이게 호출된다 ? 에는 파라미터로 넘어온 username 드감
+    public User findByUsername(String username);    //Jpa Query methods
 }
