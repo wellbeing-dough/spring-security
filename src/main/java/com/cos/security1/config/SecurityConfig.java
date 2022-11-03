@@ -1,13 +1,20 @@
 package com.cos.security1.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity  //스프링 시큐리티 필터가 스프링 필터체인에 등록이 된다
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean   //Bean 어노테이션 쓰면 해당 메서드의 리턴되는 오브젝트를 ioc 로 등록해준다
+    public BCryptPasswordEncoder encodePwd() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //밑에 세줄을 추가하면 어드민이나 유저나 뭘 들어가도 그냥 접속하게 안하고 로그인 페이지로 가게 해준다
                 .and()
                 .formLogin()
-                .loginPage("/login");
+                .loginPage("/loginForm");
     }
 }
 
