@@ -3,8 +3,12 @@ package com.cos.security1.controller;
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,5 +64,18 @@ public class IndexController {
         user.setPassword(encPassword);
         userRepository.save(user);
         return "redirect:/loginForm";
+    }
+
+    @Secured("ROLE_ADMIN")  //권한이 admin 만 가능
+    @GetMapping("/info")
+    public @ResponseBody String info() {
+        return "개인정보";
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")   //이 데이터 메소드가 실행되기 직전에 실행된다 권한 하나주고싶으면
+    //Secured 쓰면되는데 이건 두개 동시에가능
+    @GetMapping("/data")
+    public @ResponseBody String data() {
+        return "데이터 정보";
     }
 }
