@@ -16,18 +16,27 @@ package com.cos.security1.config.auth;
 // UserDetails 를 implement 해줘야 한다
 
 import com.cos.security1.model.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails {
+@Getter
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;  //콤포지션
 
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
     }
 
     // 해당 유저의 권한을 리턴하는 곳
@@ -77,5 +86,10 @@ public class PrincipalDetails implements UserDetails {
         // 우리 사이트 1년동안 로그인을 안하면 휴먼 계정으로 하기로 함.
         // 현재 시간 - 로그인 시간(User.class 에 멤버 추가) = 1년을 초과하면 return false
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
