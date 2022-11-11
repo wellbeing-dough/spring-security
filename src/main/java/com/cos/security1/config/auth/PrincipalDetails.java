@@ -1,4 +1,4 @@
-package com.cos.security1.auth;
+package com.cos.security1.config.auth;
 
 // 시큐리티가 /login 주소요청이 오면 낚아채서 로그인을 진행시킨다.
 // 로그인 진행이 완료가 되면 시큐리티 세션을 만들어 준다. (Security ContextHolder) 라는 키값에 세션정보 저장

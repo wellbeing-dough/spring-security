@@ -1,5 +1,7 @@
 package com.cos.security1.config;
 
+import com.cos.security1.config.oauth.PrincipalOauth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +15,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity  //스프링 시큐리티 필터가 스프링 필터체인에 등록이 된다
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) //secured 어노테이션 활성화, (pre,postAuthorize) 어노테이션 활성화
 public class SecurityConfig {
+
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean   //Bean 어노테이션 쓰면 해당 메서드의 리턴되는 오브젝트를 ioc 로 등록해준다
     public BCryptPasswordEncoder encodePwd() {
@@ -39,7 +44,11 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/")    //login 완료되면 메인페이지로
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm");   //구글 로그인이 완료된 후에 후처리가 필요
+                .loginPage("/loginForm")   //구글 로그인이 완료된 후에 후처리가 필요. 1.코드받기(인증) 2.엑세스토큰받(권한) 3.사용자프로필정보가져
+                //와서 그 정보를 토대로 회원가입을 자동으로 진행시키기도 함 그 정보가 모자라면 추가적인 회원가입
+                //구글 로그인을하면 엑세스토큰 + 사용자 프로필정보를 한방에 받아온 oauth 라이브러리의 장점
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
         return http.build();
     }
 }
