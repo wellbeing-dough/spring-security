@@ -21,8 +21,8 @@ public class User {
     private String email;
     private String role;
 
-    private String provider;
-    private String providerId;
+    private String provider;    //ex) google
+    private String providerId;  //ex) google 의 Attribute 정보
     @CreationTimestamp
     private Timestamp createDate;
 
