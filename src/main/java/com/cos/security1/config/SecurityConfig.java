@@ -19,11 +19,10 @@ public class SecurityConfig {
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
 
-    @Bean   //Bean 어노테이션 쓰면 해당 메서드의 리턴되는 오브젝트를 ioc 로 등록해준다
-    public BCryptPasswordEncoder encodePwd() {
-        return new BCryptPasswordEncoder();
-    }
-
+//    @Bean   //Bean 어노테이션 쓰면 해당 메서드의 리턴되는 오브젝트를 ioc 로 등록해준다
+//    public BCryptPasswordEncoder encodePwd() {
+//        return new BCryptPasswordEncoder();
+//    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();

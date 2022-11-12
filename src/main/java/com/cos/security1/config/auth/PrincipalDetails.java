@@ -29,9 +29,17 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;  //콤포지션
+    private Map<String, Object> attributes;
 
+    //일반 로그인할때 사용하는 생성자
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    //OAuth 로그인할때 사용하는 생성 user 정보는 attributes 라는 정보를 토대로 user Object 를 만든다
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
     }
 
     @Override
