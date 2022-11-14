@@ -2,6 +2,9 @@ package com.cos.security1.config.oauth;
 
 import com.cos.security1.CustomBCryptPasswordEncoder;
 import com.cos.security1.config.auth.PrincipalDetails;
+import com.cos.security1.config.oauth.provider.FacebookUserInfo;
+import com.cos.security1.config.oauth.provider.GoogleUserInfo;
+import com.cos.security1.config.oauth.provider.OAuth2UserInfo;
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +43,20 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         System.out.println("getAttributes: " + oauth2User.getAttributes());
 
         //회원가입 강제로 진행
-        String provider = userRequest.getClientRegistration().getClientId(); //google
-        String providerId = oauth2User.getAttribute("sub");
-        String email = oauth2User.getAttribute("email");
+        OAuth2UserInfo oAuth2UserInfo = null;
+        if(userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            System.out.println("구글 로그인 요청");
+            oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            System.out.println("페이스북 로그인 요청");
+            oAuth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+        }else {
+            System.out.println("우리는 구글과 페북만 지원해요");
+        }
+
+        String provider = oAuth2UserInfo.getProvider(); //google
+        String providerId = oAuth2UserInfo.getProviderId();
+        String email = oAuth2UserInfo.getEmail();
         String username = provider+"_"+providerId; //google_10974.....
         String password = bCryptPasswordEncoder.encode("겟인데어");
         String role = "ROLE_USER";
@@ -59,7 +73,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .build();
             userRepository.save(userEntity);
         }else {
-            System.out.println("구글로그인을 한 적이 잇군요 너는 자동 회원가입");
+            System.out.println("소셜 로그인을 한 적이 잇군요 너는 자동 회원가입");
         }
         System.out.println("======password = " + password);
 
